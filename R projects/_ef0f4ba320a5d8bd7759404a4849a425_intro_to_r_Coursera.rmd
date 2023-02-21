@@ -333,7 +333,9 @@ We can make a plot of the total number of baptisms per year with the following c
 
 ```{r plot-total-vs-year-line}
 ggplot(data = arbuthnot, aes(x = year, y = total)) +
-  geom_line()
+  geom_line()+geom_point()
+
+# with that we can both vialize pointed and lined data together
 ```
 
 Note that using `geom_line()` instead of `geom_point()` results in a line plot instead
