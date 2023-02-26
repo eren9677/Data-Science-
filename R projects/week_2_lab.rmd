@@ -57,6 +57,7 @@ To view the names of the variables, type the command
 
 ```{r names}
 names(nycflights)
+
 ```
 
 This returns the names of the variables in this data frame. The **codebook**
@@ -96,6 +97,7 @@ A very useful function for taking a quick peek at your data frame, and viewing
 its dimensions and data types is `str`, which stands for **str**ucture.
 
 ```{r str}
+#don't forget that str in R means structure not string
 str(nycflights)
 ```
 
@@ -161,10 +163,11 @@ first `filter` the data for flights headed to RDU (`dest == "RDU"`) and then mak
 a histogram of only departure delays of only those flights.
 
 ```{r rdu-flights-hist}
+#this chunk of code will only take flight which are headed towards RDU and assigns these rows to a new dataframe called rdu_flights
 rdu_flights <- nycflights %>%
   filter(dest == "RDU")
 ggplot(data = rdu_flights, aes(x = dep_delay)) +
-  geom_histogram()
+  geom_histogram(binwidth = 5)
 ```
 
 Let's decipher these three lines of code:
@@ -242,7 +245,9 @@ this data frame as `sfo_feb_flights`. How many flights meet these criteria?
 
 ```{r sfo-feb-flights}
 # type your code for Question 1 here, and Knit
-
+sfo_feb_flights <- nycflights %>%
+  filter(dest == "SFO",month == 2)
+dim(sfo_feb_flights)
 ```
 
 
@@ -258,6 +263,8 @@ delays of `sfo_feb_flights`. Which of the following is false?
 
 ```{r sfo-feb-flights-arrival-delays}
 # type your code for Question 2 here, and Knit
+ggplot(data=sfo_feb_flights, aes(x=arr_delay)) +
+  geom_histogram(binwidth=10)
 
 ```
 
@@ -279,7 +286,7 @@ statistics.
 `sfo_feb_flights` data frame, grouped by carrier. Which carrier has the hights 
 IQR of arrival delays? 
 <ol>
-<li> American Airlines </li> 
+<li> Amserican Airlines </li> 
 <li> JetBlue Airways </li> 
 <li> Virgin America </li> 
 <li> Delta and United Airlines </li>
@@ -288,7 +295,9 @@ IQR of arrival delays?
 
 ```{r sfo-feb-flights-arrival-delays-carrier}
 # type your code for Question 3 here, and Knit
-
+sfo_feb_flights %>%
+  group_by(carrier) %>%
+  summarise(n = n(), inter_quartile_range = IQR(dep_delay), median = median(dep_delay), mean = mean(dep_delay) )
 ```
 
 ### Departure delays over months
@@ -322,7 +331,7 @@ nycflights %>%
 
 ```{r highest-avg-dep-delay-month}
 # type your code for Question 4 here, and Knit
-
+march
 ```
 
 
@@ -337,6 +346,10 @@ nycflights %>%
 
 ```{r highest-median-dep-delay-month}
 # type your code for Question 5 here, and Knit
+nycflights %>%
+  group_by(month) %>%
+  summarise(median_department_delay = median(dep_delay)) %>%
+  arrange(desc(median_department_delay))
 
 ```
 
@@ -359,6 +372,7 @@ side-by-side box plots:
 ggplot(nycflights, aes(x = factor(month), y = dep_delay)) +
   geom_boxplot()
 ```
+
 
 There is some new syntax here: We want departure delays on the y-axis and the
 months on the x-axis to produce side-by-side box plots. Side-by-side box plots
@@ -421,7 +435,10 @@ which NYC airport would you choose to fly out of?
 
 ```{r on-time-dep-perc-airport}
 # type your code for Question 7 here, and Knit
-
+nycflights %>%
+  group_by(origin) %>%
+  summarise(ot_rate = sum(dep_type == "on time")/ n()) %>%
+  arrange(desc(ot_rate))
 ```
 
 We can also visualize the distribution of on on time departure rate across 
