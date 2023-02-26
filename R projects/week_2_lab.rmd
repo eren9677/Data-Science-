@@ -331,7 +331,7 @@ nycflights %>%
 
 ```{r highest-avg-dep-delay-month}
 # type your code for Question 4 here, and Knit
-march
+#march
 ```
 
 
@@ -467,6 +467,15 @@ Google this tail number to find out more about the aircraft.
 
 ```{r fastest-avg-speed-tailnum}
 # type your code for Question 8 here, and Knit
+nycflights <- nycflights %>%
+  mutate(avg_speed = distance/air_time)
+
+
+nycflights %>%
+  select(avg_speed,tailnum) %>%
+    arrange(desc(avg_speed))
+  
+  
 
 ```
 
@@ -483,6 +492,7 @@ about the relationship between average speed and distance.
 
 ```{r avg-speed-dist-scatter}
 # type your code for Question 9 here, and Knit
+ggplot(data =nycflights, aes(x = avg_speed, y=distance))+geom_point()
 
 ```
 
@@ -497,5 +507,13 @@ were `"delayed"` departing arrive `"on time"`?
 
 ```{r on-time-arr-perc}
 # type your code for Question 10 here, and Knit
-
+nycflights <- nycflights %>%
+  mutate(arr_type = ifelse(arr_delay <=0, "on time","delayed"))
+nycflights %>%
+  group_by(dep_type) %>%
+  summarise(proportion_ontime = sum(arr_type =="on time")/n(),
+            proportion_delayed = sum(arr_type =="delayed")/n()
+            )
+  
+  
 ```
