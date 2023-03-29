@@ -81,7 +81,7 @@ ames %>%
 <li> The IQR is approximately 616.7 square feet. </li>
 <li> The smallest house is 334 square feet and the largest is 5,642 square feet. </li>
 </ol>
-
+#answer is b in this case 
 
 ## The unknown sampling distribution
 
@@ -109,6 +109,11 @@ home sales.
 </div>
 ```{r samp1-dist}
 # type your code for the Exercise here, and Run Document
+ggplot(data=samp_1,aes(x=area))+geom_histogram(binwidth=150)
+
+samp_1 %>%
+ 
+   summarise(mean = mean(area),meadian= median(area),max=max(area),min=min(area),sd = sd(area),iqr=IQR(area))
 
 ```
 
@@ -133,7 +138,7 @@ population.
 <li> Sample size of 100. </li>
 <li> Sample size of 1000. </li>
 </ol>
-
+#i think the answer is 1k because more data means more insights about it always
 Let's take one more sample of size 50, and view the mean area in this sample:
 ```{r mean-samp2}
 ames %>%
@@ -201,7 +206,11 @@ Note that for each of the 15,000 times we computed a mean, we did so from a
 </div>
 ```{r practice-sampling-dist}
 # type your code for the Exercise here, and Run Document
+sample_means_small <- ames %>%
+  rep_sample_n(size=10,reps=25,replace=TRUE) %>%
+  summarise(bar_x = mean(area))
 
+ggplot(data = sample_means_small,aes(bar_x))+geom_histogram(binwidth=50)
 ```
 
 3. How many elements are there in this object called `sample_means_small`? 
@@ -214,7 +223,7 @@ Note that for each of the 15,000 times we computed a mean, we did so from a
 </ol>
 ```{r sample-means-small}
 # type your code for Question 3 here, and Run Document
-
+#there are exactly 25 variabels in thsi sample because we replicated it 25 
 ```
 
 4. Which of the following is **true** about the elements in the sampling distributions you created?
@@ -223,7 +232,7 @@ Note that for each of the 15,000 times we computed a mean, we did so from a
 <li> Each element represents the square footage of a house. </li>
 <li> Each element represents the true population mean of square footage of houses. </li>
 </ol>
-
+#answer of this 4th question is A
 
 ## Sample size and the sampling distribution
 
@@ -335,13 +344,17 @@ shinyApp(
 <li> increases </li>
 <li> stays the same </li>
 </ol>
-
+#increases
 <div id="exercise">
 **Exercise**: Take a random sample of size 50 from `price`. Using this sample, what is your best point estimate of the population mean?
 </div>
 ```{r price-sample}
 # type your code for this Exercise here, and Run Document
+price_sample <- ames %>%
+  sample_n(size=50)
 
+price_sample %>%
+  summarise(mean = mean(price))
 ```
 
 <div id="exercise">
@@ -357,7 +370,7 @@ shinyApp(
 </div>
 ```{r price-sampling-more}
 # type your code for this Exercise here, and Run Document
-
+#180977
 ```
 
 * * *
